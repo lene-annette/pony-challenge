@@ -1,16 +1,24 @@
 import React, { Component } from 'react';
-//add size of maze
+import Game from './Game';
+/**
+ * Renders page shown to user before starting the game. 
+ * Asks for player name and difficulty, size of maze is preset in maze
+ * Renders the Game component when game is started. 
+ */
 export default class Startpage extends Component {
     constructor(props){
         super(props)
         this.state={
-            name:"",
+            name:'',
             difficulty:0,
+            width: 15,
+            height: 15,
             start: false
         }
+        
+        this.handleEnd = this.handleEnd.bind(this)
         this.handleChange = this.handleChange.bind(this)
         this.handleClick = this.handleClick.bind(this)
-        this.handleEnd = this.handleEnd.bind(this)
     }
 
     handleEnd(){
@@ -24,7 +32,7 @@ export default class Startpage extends Component {
     handleChange(event){
         if(event.target.name === "pony"){
             this.setState({name:event.target.value})
-        }else{
+        }else if(event.target.name === "difficulty"){
             let no = parseInt(event.target.value)
             this.setState({difficulty:no})
         }
@@ -34,10 +42,13 @@ export default class Startpage extends Component {
         let content = ""
         if(this.state.start){
             content = (
-                <div>
-                    <p>Game has started</p>
-                    <button onClick={this.handleEnd}>End game</button>
-                </div>
+               <Game 
+                    handleEnd={this.handleEnd}
+                    name={this.state.name}
+                    difficulty={this.state.difficulty}
+                    width={this.state.width}
+                    height={this.state.height}
+               />
             )
         }else{
             content = (

@@ -3,16 +3,19 @@ import {config} from '../config';
 
 export async function createMaze(name, difficulty, width, height){
     let body = {
-        [maze-width]: width,
-        [maze-height]: height,
-        [maze-player-name]: name,
+        ["maze-width"]: width,
+        ["maze-height"]: height,
+        ["maze-player-name"]: name,
         difficulty: difficulty
     };
 
+    console.log(body)
+
     try {
-        let data = await axios.post(`${config.url}/pony-challenge/maze`, JSON.stringify(body), 
+        let res = await axios.post(`${config.url}/pony-challenge/maze`, JSON.stringify(body), 
                                             {headers: {'Content-Type': 'application/json'}})
-        return data
+        console.log(res)
+        return res.data
     } catch(error){
         console.log(error)
     }
@@ -20,8 +23,8 @@ export async function createMaze(name, difficulty, width, height){
 
 export async function getMaze(id){
     try{
-        let data = await axios.get(`${config.url}/pony-challenge/maze/${id}`)
-        return data
+        let res = await axios.get(`${config.url}/pony-challenge/maze/${id}`)
+        return res.data
     }catch(error){
         console.log(error)
     }
@@ -33,9 +36,9 @@ export async function movePony(id, direction){
     }
 
     try{
-        let data = await axios.post(`${config.url}/pony-challenge/maze/${id}`, JSON.stringify(body),
+        let res = await axios.post(`${config.url}/pony-challenge/maze/${id}`, JSON.stringify(body),
                                         {headers: {'Content-Type': 'application/json'}})
-        return data
+        return res.data
     }catch(error){
         console.log(error)
     }
@@ -43,8 +46,8 @@ export async function movePony(id, direction){
 
 export async function printMaze(id){
     try{
-        let data = await axios.get(`${config.url}/pony-challenge/maze/${id}/print`)
-        return data
+        let res = await axios.get(`${config.url}/pony-challenge/maze/${id}/print`)
+        return res.data
     }catch(error){
         console.log(error)
     }

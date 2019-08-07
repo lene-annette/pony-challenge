@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+//add size of maze
 export default class Startpage extends Component {
     constructor(props){
         super(props)

@@ -46,14 +46,20 @@ export default class Game extends Component {
         } else {
             let info = this.state.maze
             console.log(this.state.maze)
+            let print = JSON.stringify(this.state.print)
+            let mazeArr = print.split('\\n')
+            let maze = mazeArr.map(line => {
+                return (
+                <pre>{line}</pre>
+                )
+            })
             content = (
                 <div>
                     <div>
-                        <p>Pony: {info.pony[0]}, Domokun: {info.domokun[0]}</p>
                         <p>Size: {info.size[0]} * {info.size[1]}, Difficulty: {info.difficulty}</p>
                     </div>
                     <div className="display-linebreak">
-                        {this.state.print}
+                        {maze}
                     </div>
                     <div>
                         <button value="north" onClick={this.move}>up</button>
@@ -63,7 +69,6 @@ export default class Game extends Component {
                     </div>
                 </div>
             )
-
         }
         return (
             <div>

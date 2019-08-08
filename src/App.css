@@ -32,6 +32,29 @@
   }
 }
 
-.display-linebreak{
-  white-space: pre-line;
+.game-content{
+  text-align: center;
+}
+
+.wrapper{
+  display: inline-block;
+}
+
+.errorMessage{
+  color: red;
+  font: bold;
+}
+
+.game{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.maze{
+  margin-left: 1em;
+}
+
+.game button{
+  margin-left: 1em;
 }

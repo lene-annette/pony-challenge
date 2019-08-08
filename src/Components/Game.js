@@ -1,64 +1,76 @@
 import React, { Component } from 'react';
+import GameOver from './GameOver'
 import { createMaze, getMaze, movePony, printMaze } from '../Controllers/PonyController';
 /**
  * Renders game if this is active
  */
-
 export default class Game extends Component {
     constructor(props) {
         super(props)
         this.state = {
             id: null,
             maze: null,
-            print: null
+            print: null,
+            ended: null,
+            error: ''
         }
-
         this.move = this.move.bind(this)
     }
 
-    async move(event){
+    async move(event) {
+        this.setState({ error: '' })
         let direction = event.target.value
-        let res = await movePony(this.state.id,direction)
-        console.log(res)
-        if(res["state-result"] === 'Move accepted'){
+        let res = await movePony(this.state.id, direction)
+        if (res["state-result"] === 'Move accepted') {
             let print = await printMaze(this.state.id)
-            console.log(print)
-            this.setState({print:print})
+            this.setState({ print: print })
+        } else if (res.state === 'won' || res.state === 'over') {
+            let ended = {
+                result: res["state-result"],
+                hidden: res["hidden-url"]
+            }
+            this.setState({ ended: ended })
+        } else {
+            this.setState({ error: res["state-result"] })
         }
-        
     }
 
     async componentWillMount() {
+        //Should handle if name is wrong
         let data = await createMaze(this.props.name, this.props.difficulty, this.props.width, this.props.height)
         this.setState({ id: data.maze_id })
         let maze = await getMaze(data.maze_id)
         this.setState({ maze: maze })
         let print = await printMaze(data.maze_id)
-        console.log(print)
         this.setState({ print: print })
-
     }
 
     render() {
         let content = ''
         if (this.state.print === null) {
             content = 'Loading'
+        } else if (this.state.ended !== null) {
+            content = (
+                <GameOver
+                    ended={this.state.ended}
+                />
+            )
         } else {
             let info = this.state.maze
-            console.log(this.state.maze)
             let print = JSON.stringify(this.state.print)
             let mazeArr = print.split('\\n')
             let maze = mazeArr.map(line => {
                 return (
-                <pre>{line}</pre>
+                    <pre>{line}</pre>
                 )
             })
             content = (
-                <div>
+                <div className="game">
                     <div>
+                        <p className="errorMessage">{this.state.error}</p>
                         <p>Size: {info.size[0]} * {info.size[1]}, Difficulty: {info.difficulty}</p>
-                    </div>
-                    <div className="display-linebreak">
+                    </div> 
+                    <div className="maze">
                         {maze}
                     </div>
                     <div>
@@ -72,8 +84,12 @@ export default class Game extends Component {
         }
         return (
             <div>
-                {content}
-                <button onClick={this.props.handleEnd}>end</button>
+                <div className="game-content">
+                    <div className="wrapper">
+                        {content}
+                    </div>
+                </div>
+                <button onClick={this.props.handleEnd}>Back to start</button>
             </div>
         )
     }

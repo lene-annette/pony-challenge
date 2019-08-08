@@ -9,15 +9,12 @@ export async function createMaze(name, difficulty, width, height){
         difficulty: difficulty
     };
 
-    console.log(body)
-
     try {
         let res = await axios.post(`${config.url}/pony-challenge/maze`, JSON.stringify(body), 
                                             {headers: {'Content-Type': 'application/json'}})
-        console.log(res)
         return res.data
     } catch(error){
-        console.log(error)
+        console.log(error.message)
     }
 }
 

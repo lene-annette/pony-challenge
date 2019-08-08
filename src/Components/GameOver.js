@@ -12,8 +12,8 @@ export default class GameOver extends Component {
     render() {
         return (
             <div>
-                <div>
-                    <img src={config.url + this.props.ended.hidden} />
+                <div className="img-box">
+                    <img className="end-image" src={config.url + this.props.ended.hidden} />
                 </div>
                 <div>{this.props.ended.result}</div>
             </div>

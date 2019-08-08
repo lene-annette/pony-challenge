@@ -58,3 +58,14 @@
 .game button{
   margin-left: 1em;
 }
+
+.img-box{
+  display:grid;
+  height: 100%;
+}
+
+.end-image{
+  max-width: 100%;
+  max-height: 100vh;
+  margin: auto;
+}

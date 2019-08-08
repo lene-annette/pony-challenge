@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
 import Game from './Game';
 import {createMaze} from '../Controllers/PonyController';
-
 const image = require('../Images/hero2.jpg')
+
 /**
  * Renders page shown to user before starting the game. 
- * Asks for player name and difficulty, size of maze is preset in maze
- * Renders the Game component when game is started. 
+ * Asks for player name and difficulty, size of maze is preset.
+ * Calls the Game component when game is started. 
  */
-export default class Startpage extends Component {
+
+ export default class Startpage extends Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -20,16 +21,19 @@ export default class Startpage extends Component {
             id: '',
             error: null
         }
-
         this.handleEnd = this.handleEnd.bind(this)
         this.handleChange = this.handleChange.bind(this)
         this.handleClick = this.handleClick.bind(this)
     }
 
+    /**used to get back to this component, either during game or game has ended */
     handleEnd() {
         this.setState({ start: false })
     }
 
+    /**handles when player use button to start game
+     * runs check if controller returns error message or an id. If id is returned game starts. 
+     */
     async handleClick() {
         let data = await createMaze(this.state.name,this.state.difficulty,this.state.width,this.state.height)
         if(data.maze_id !== undefined){
@@ -42,6 +46,7 @@ export default class Startpage extends Component {
         }
     }
 
+    /**saves the input from player in state */
     handleChange(event) {
         if (event.target.name === "pony") {
             this.setState({ name: event.target.value })
@@ -54,6 +59,7 @@ export default class Startpage extends Component {
     render() {
         let content = ""
         if (this.state.start) {
+            //calss Game component
             content = (
                 <Game
                     handleEnd={this.handleEnd}
@@ -61,6 +67,7 @@ export default class Startpage extends Component {
                 />
             )
         } else {
+            //Shows start page
             let error = ''
             if(this.state.error !== null){
                 error = this.state.error

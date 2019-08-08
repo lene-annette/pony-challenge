@@ -8,14 +8,14 @@ export async function createMaze(name, difficulty, width, height){
         ["maze-player-name"]: name,
         difficulty: difficulty
     };
-
-    try {
-        let res = await axios.post(`${config.url}/pony-challenge/maze`, JSON.stringify(body), 
-                                            {headers: {'Content-Type': 'application/json'}})
-        return res.data
-    } catch(error){
-        console.log(error.message)
-    }
+    let res = await axios.post(`${config.url}/pony-challenge/maze`, JSON.stringify(body), 
+                    {headers: {'Content-Type': 'application/json'}})
+                    .then(response => {
+                        return response.data
+                    }).catch(err => {
+                        return err.response.data
+                    })
+    return res
 }
 
 export async function getMaze(id){

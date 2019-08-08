@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Game from './Game';
+import {createMaze} from '../Controllers/PonyController';
 
 const image = require('../Images/hero2.jpg')
 /**
@@ -15,7 +16,9 @@ export default class Startpage extends Component {
             difficulty: 0,
             width: 20,
             height: 15,
-            start: false
+            start: false,
+            id: '',
+            error: null
         }
 
         this.handleEnd = this.handleEnd.bind(this)
@@ -27,8 +30,16 @@ export default class Startpage extends Component {
         this.setState({ start: false })
     }
 
-    handleClick() {
-        this.setState({ start: true })
+    async handleClick() {
+        let data = await createMaze(this.state.name,this.state.difficulty,this.state.width,this.state.height)
+        if(data.maze_id !== undefined){
+            this.setState({
+                id: data.maze_id,
+                start: true 
+            })
+        }else{
+            this.setState({error:data})
+        }
     }
 
     handleChange(event) {
@@ -46,19 +57,21 @@ export default class Startpage extends Component {
             content = (
                 <Game
                     handleEnd={this.handleEnd}
-                    name={this.state.name}
-                    difficulty={this.state.difficulty}
-                    width={this.state.width}
-                    height={this.state.height}
+                    id={this.state.id}
                 />
             )
         } else {
+            let error = ''
+            if(this.state.error !== null){
+                error = this.state.error
+            }
             content = (
                 <div>
                     <div>
                         <h1>Save the pony!</h1>
                         <p>Our poor pony friend has been trapped in a maze with the terrifying Domokun! Get the pony out before it is to late!</p>
                         <p>Enter your ponys name and choose a difficulty:</p>
+                        <p className="errorMessage">{error}</p>
                         <input type="text" placeholder="Name" name="pony" onChange={this.handleChange} />
                         <p>Difficulty:
                         <select value={this.state.difficulty} name="difficulty" onChange={this.handleChange}>

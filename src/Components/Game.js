@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import GameOver from './GameOver'
-import { createMaze, getMaze, movePony, printMaze } from '../Controllers/PonyController';
+import { getMaze, movePony, printMaze } from '../Controllers/PonyController';
 /**
- * Renders game if this is active
+ * Renders game
  */
 export default class Game extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            id: null,
+            id: props.id,
             maze: null,
             print: null,
             ended: null,
@@ -36,12 +36,9 @@ export default class Game extends Component {
     }
 
     async componentWillMount() {
-        //Should handle if name is wrong
-        let data = await createMaze(this.props.name, this.props.difficulty, this.props.width, this.props.height)
-        this.setState({ id: data.maze_id })
-        let maze = await getMaze(data.maze_id)
+        let maze = await getMaze(this.state.id)
         this.setState({ maze: maze })
-        let print = await printMaze(data.maze_id)
+        let print = await printMaze(this.state.id)
         this.setState({ print: print })
     }
 
